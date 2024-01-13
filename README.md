@@ -17,3 +17,13 @@ Beacuse Ruby repls use [Bundle](https://bundler.io/) under the hood to provide a
 ## Help
 
 If you need help you might be able to find an answer on our [docs](https://docs.replit.com) page. Feel free to report bugs and give us feedback [here](https://replit.com/support).
+
+
+Added notes:
+When getting this error:
+ruby replit `require': cannot load such file -- byebug (LoadError)
+
+If I run the file with 
+bundle exec ruby main.rb
+(instead of just ruby main.rb)
+It will work.
