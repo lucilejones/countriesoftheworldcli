@@ -3,6 +3,8 @@ require "nokogiri"
 require "open-uri"
 require "byebug"
 
+require_relative "./country.rb"
+
 module Scraper
   INDEX_URL = 'https://www.scrapethissite.com/pages/simple/'
   def self.scrape_countries
@@ -13,13 +15,14 @@ module Scraper
     countries = parsed_page.css("div.country")
     # puts parsed_page
     # puts countries
-    countries[0..12].each do |country|
+    countries.each do |country|
       name = country.css(".country-name").text.strip
       capital = country.css(".country-capital").text.strip
       population = country.css(".country-population").text.strip
       area = country.css(".country-area").text.strip
       # debugger;
-      puts "#{name} #{capital} #{population} #{area}"
+      # puts "#{name} #{capital} #{population} #{area}"
+      Country.new(name, capital, population, area)
     end
   end
 end
