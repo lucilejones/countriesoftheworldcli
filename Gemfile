@@ -11,3 +11,4 @@ gem "nokogiri"
 # gem "httparty"
 gem "open-uri"
 gem "byebug"
+gem 'bcrypt'
