@@ -1,12 +1,15 @@
 require "bcrypt"
+require 'json'
 
 class User
   attr_accessor :username, :password
 
   @@users = []
-  def initialize(username, password)
+  def initialize(username, password, password_pre_hashed = false)
     @username = username
-    @password = BCrypt::Password.create(password)
+    # @password = BCrypt::Password.create(password)
+    @password = password_pre_hashed ? BCrypt::Password.new(password) : BCrypt::Password.create(password)
+    # store_credentials(self)
     @@users << self
   end
 
@@ -30,4 +33,33 @@ class User
     end
     user
   end
+
+  def self.store_credentials(user)
+    file_path = 'users.json'
+
+    unless File.exist?(file_path)
+      File.open(file_path, 'w') { |file| file.write(JSON.generate([])) }
+    end
+
+    file = File.read(file_path)
+    users_data = JSON.parse(file)
+
+    users_data << { 'username' => user.username, 'password' => user.password }
+
+    File.open(file_path, 'w') { |file| file.write(JSON.generate(users_data)) }
+  end
+
+  def self.load_users_from_file
+    file_path = 'users.json' # Path to your JSON file
+
+    if File.exist?(file_path)
+      file = File.read(file_path)
+      users_data = JSON.parse(file)
+
+      users_data.each do |user_data|
+        User.new(user_data['username'], user_data['password'], true) # true indicates that the password is already hashed
+      end
+    end
+  end
+  
 end
